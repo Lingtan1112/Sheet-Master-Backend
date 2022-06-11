@@ -1,17 +1,11 @@
 package com.sheetmaster.controller;
 
-import java.io.IOException;
-import java.security.GeneralSecurityException;
-
-import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
-
-import com.google.api.services.sheets.v4.Sheets;
-import com.sheetmaster.model.Sheet;
-import com.sheetmaster.util.SheetsServiceUtil;
 
 import reactor.core.publisher.Mono;
 
@@ -22,32 +16,43 @@ import reactor.core.publisher.Mono;
 public class SheetController {
 
 	@GetMapping("/list")
-	public String getSheetList() {
+	public ResponseEntity<Object> getSheetList() {
 		System.out.println("Hello");
-
+		ResponseEntity<Object> demo = null;
 		try {
-			Mono<Sheet> d = WebClient.builder().
-			build()
-			.get()
-			.uri("https://sheets.googleapis.com/v4/spreadsheets/{spreadsheetId}/values/{range}")
-			.retrieve()
-			.bodyToMono(Sheet.class);
-			Sheets sheetService = SheetsServiceUtil.getSheetsService();
-			System.out.println(d);
-			
-		} catch (IOException | GeneralSecurityException e) {
+			RestTemplate res = new RestTemplate();
+			demo = res.getForEntity(
+					"https://sheets.googleapis.com/v4/spreadsheets/12xPYQO4zXBEecb_F115dG6jswplsLX48Cqe_2lCO0zs/values/demo123?key=AIzaSyBGi2QsBVggOvi7qHHLkEDPWTDfUGHqGTM",
+					Object.class);
+
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return "Hello World";
-		
-		
+		return demo;
+
+
 	}
-	
-	@GetMapping("/demo")
-	public String demo() {
-		
-		return "Hello World";
-		
+
+	@GetMapping("/webclient")
+	public Mono<ResponseEntity<Object>> web() {
+		ResponseEntity<Object> demo = null;
+
+		Mono<ResponseEntity<Object>> d = WebClient.builder().build().get().uri(
+						"https://sheets.googleapis.com/v4/spreadsheets/12xPYQO4zXBEecb_F115dG6jswplsLX48Cqe_2lCO0zs?key=AIzaSyBGi2QsBVggOvi7qHHLkEDPWTDfUGHqGTM")
+				.retrieve().toEntity(Object.class);
+		System.out.println(d);
+		return d;
 	}
-	
+
+	@GetMapping("/info")
+	public ResponseEntity<Object> demo() {
+		ResponseEntity<Object> demo = null;
+		RestTemplate res = new RestTemplate();
+		demo = res.getForEntity(
+				"https://sheets.googleapis.com/v4/spreadsheets/12xPYQO4zXBEecb_F115dG6jswplsLX48Cqe_2lCO0zs?key=AIzaSyBGi2QsBVggOvi7qHHLkEDPWTDfUGHqGTM",
+				Object.class);
+		return demo;
+
+	}
+
 }

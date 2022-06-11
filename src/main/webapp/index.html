@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+</head>
+<body>
+Sheet URL<br/>
+<input type="url" id="sheetUrl" placeholder="Enter the URL"/>
+<button id="getButton">Get</button><br/>
+<textarea id="responseJson" rows="100" cols="70"></textarea>
+
+<table>
+<thead></thead>
+<tbody>
+
+</tbody>
+</table>
+</body>
+
+<script>
+
+$(document).ready(function(){
+	
+	$(document).on('click','#getButton',function(){
+		getSheetInfo($("#sheetUrl").val());
+	});
+	
+	function getSheetInfo(url){
+		var param = {'url':url};
+		$.ajax({
+			url:"http://localhost:4300/v1/sheet/list",
+			type:"GET",
+			data:param,
+			success:function(data){
+				console.log(data);
+				$("#responseJson").val(data.values);
+				var str = `<table>hello</table>`;
+			}
+		});
+	}
+
+});
+
+</script>
+
+</html>
