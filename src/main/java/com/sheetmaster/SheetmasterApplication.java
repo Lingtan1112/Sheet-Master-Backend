@@ -19,13 +19,7 @@ public class SheetmasterApplication implements CommandLineRunner{
 
 	@Override
 	public void run(String... args) throws Exception {
-		System.out.println("Hello start");
-		Sheets sheetsService = SheetsServiceUtil.getSheetsService();
-		System.out.println(sheetsService.getBaseUrl());
-		System.out.println(sheetsService.getServicePath());
-		System.out.println(sheetsService.getRootUrl());
-		System.out.println(sheetsService);
-		
+		System.out.println("Hello start");		
 	}
 
 }

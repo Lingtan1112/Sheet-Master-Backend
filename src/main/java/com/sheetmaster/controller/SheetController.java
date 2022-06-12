@@ -1,20 +1,29 @@
 package com.sheetmaster.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
+
+import com.sheetmaster.bussiness.SheetBussiness;
 
 import reactor.core.publisher.Mono;
 
 
 @RestController
-@RequestMapping("/v1/sheet")
-//@CrossOrigin(origins = "http://localhost:4200")
+@RequestMapping("/sheetmaster/v1/sheet")
+@CrossOrigin(origins = "http://localhost:4200")
 public class SheetController {
 
+	@Autowired
+	protected SheetBussiness SheetBussiness;
+	
 	@GetMapping("/list")
 	public ResponseEntity<Object> getSheetList() {
 		System.out.println("Hello");
@@ -28,7 +37,7 @@ public class SheetController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return demo;
+		return demo; 
 
 
 	}
@@ -55,4 +64,13 @@ public class SheetController {
 
 	}
 
+	@PostMapping("/sheetinfo")
+	public Mono<ResponseEntity<Object>> getBasicSheetInfo(@RequestParam("sheetUrl") String sheetUrl) {
+		Mono<ResponseEntity<Object>> response = null;
+		if(sheetUrl!=null || sheetUrl != "") {
+			response = SheetBussiness.getSheetInfo(sheetUrl);
+		}
+		return response;
+		
+	}
 }
